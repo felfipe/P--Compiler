@@ -1,6 +1,6 @@
 import sys
 
-reserved_words = {'program' : 'simb_program', 'begin' : 'simb_begin', 'end' : 'simb_end', 'const' : 'simb_const', 'var' : 'simb_var', 'real' : 'simb_real', 'integer' : 'simb_integer', 'procedure' : 'simb_procedure', 'else' : 'simb_else', 'read' : 'simb_read','write': 'simb_write','while': 'simb_while','do': 'simb_do','if': 'simb_if','then': 'simb_then', 'for' : 'simb_for', 'to' : 'simb_to'}
+reserved_words = {'program' : 'simb_program', 'begin' : 'simb_begin', 'end' : 'simb_end', 'const' : 'simb_const', 'var' : 'simb_var', 'real' : 'simb_tipo', 'integer' : 'simb_tipo', 'procedure' : 'simb_procedure', 'else' : 'simb_else', 'read' : 'simb_read','write': 'simb_write','while': 'simb_while','do': 'simb_do','if': 'simb_if','then': 'simb_then', 'for' : 'simb_for', 'to' : 'simb_to'}
 simbols = {'-' : "simb_menos", '+': "simb_mais", '/': "simb_div", '*': "simb_mult", ',': "simb_virg", '.': "simb_point", '=':'simb_igual',';':'simb_pv','(':'simb_apar',')':'simb_fpar'}
 def main():
 
@@ -17,8 +17,17 @@ def main():
     content = file.read()
     file.close()
 
+
+    output = open("out.txt", "w")
+    output_program = ""
     while(i < len(content)):
-        print(lexicalAutomate(content))
+        try:
+            printText = lexicalAutomate(content)
+            if printText: 
+                output_program += printText[0] + ', ' + printText[1] + '\n'
+        except:
+            pass
+    output.write(output_program)
     return
 
 i = 0
@@ -31,7 +40,7 @@ def lexicalAutomate(stream):
     while(i < len(stream) and (stream[i] == ' ' or stream[i] == '\t' or stream[i] == '\n')):
         i+=1
     if(i == len(stream)):
-        return
+        return False
 
     if(isNumber(stream[i])):
         return numberAutomate(stream)
@@ -49,7 +58,7 @@ def lexicalAutomate(stream):
         i += 1
         return isSimbol(stream[i - 1])
     i+=1
-    return (stream[i-1],'Caractere não permitido')
+    return (stream[i-1],'erro("caractere nao permitido")')
 
 
 def numberAutomate(stream):
@@ -59,6 +68,10 @@ def numberAutomate(stream):
         i+=1
 
     if(stream[i] == '.'):
+        i+=1
+        if(not isNumber(stream[i])):
+            i+=1
+            return (stream[init:i], 'erro("Numero real mal formado")')
         while(isNumber(stream[i])):
             i+=1
         return (stream[init:i], "real_number") # PCL

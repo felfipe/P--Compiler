@@ -1,0 +1,30 @@
+program, simb_program
+p, id
+;, simb_pv
+{ olla q passas }, comentario
+var, simb_var
+x, id
+@, erro("caractere nao permitido")
+:, simb_dp
+integer, simb_tipo
+;, simb_pv
+begin, simb_begin
+x, id
+:=, simb_atrib
+1, integer_number
+;, simb_pv
+while, simb_while
+(, simb_apar
+x, id
+<, simb_menor
+3, integer_number
+), simb_fpar
+do, simb_do
+x, id
+:=, simb_atrib
+x, id
++, simb_mais
+1, integer_number
+;, simb_pv
+end, simb_end
+., simb_point
